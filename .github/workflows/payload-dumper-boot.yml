@@ -21,15 +21,10 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - name: 💥 Maximize Build Space
-      uses: easimon/maximize-build-space@master
+    - name: 💥 Set Swap Space
+      uses: pierotofy/set-swap-space@master
       with:
-        root-reserve-mb: 1024
-        swap-size-mb: 10240
-        remove-dotnet: 'true'
-        temp-reserve-mb: 1024
-        remove-android: 'true'
-        remove-haskell: 'true'
+        swap-size-gb: 12
 
     - name: 💥 Check Out
       uses: actions/checkout@main
@@ -43,13 +38,13 @@ jobs:
       run: |
         export HOME=${GITHUB_WORKSPACE}
         mkdir -p ${GITHUB_WORKSPACE}/workspace && cd ${GITHUB_WORKSPACE}/workspace
-        wget -U "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0" "${{ github.event.inputs.Tool_Link }}" -O ./payload-dumper.tar.gz
+        wget "${{ github.event.inputs.Tool_Link }}" -O ./payload-dumper.tar.gz
         tar -zxvf ./payload-dumper.tar.gz
 
     - name: 💥 Download Rom
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
-        wget -U "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0" "${{ github.event.inputs.Rom_Link }}" -O ./${{ github.event.inputs.Zip_name }}.zip
+        wget -U "${{ github.event.inputs.Rom_Link }}" -O ./${{ github.event.inputs.Zip_name }}.zip
         unzip ./${{ github.event.inputs.Zip_name }}.zip
         ls -la ./*
 
