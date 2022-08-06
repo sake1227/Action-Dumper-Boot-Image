@@ -44,7 +44,8 @@ jobs:
     - name: 💥 Download Rom
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
-        wget "${{ github.event.inputs.Rom_Link }}" -O ./${{ github.event.inputs.Zip_name }}.zip
+        sudo apt-get install axel
+        axel -n 16 "${{ github.event.inputs.Rom_Link }}" -o ./${{ github.event.inputs.Zip_name }}.zip
         unzip ./${{ github.event.inputs.Zip_name }}.zip
         ls -la ./*
 
