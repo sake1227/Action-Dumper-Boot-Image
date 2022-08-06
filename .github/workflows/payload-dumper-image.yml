@@ -1,0 +1,74 @@
+name: Payload Dumper Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      Tool_Link:
+        description: 'Tool_Link'
+        required: false
+        default: 'https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_linux_amd64.tar.gz'
+      Rom_Link:
+        description: 'Rom_Link'
+        required: true
+        default: ''
+      Zip_name:
+        description: 'Zip_name'
+        required: true
+        default: ''
+      Image_name:
+        description: 'Image_name'
+        required: true
+        default: ''
+       
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: 💥 Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 12
+
+    - name: 💥 Check Out
+      uses: actions/checkout@main
+
+    - name: 💥 Set Variables
+      run: |
+        echo "::set-output name=date::$(date +%F)"
+      id: var
+
+    - name: 💥 Download Tools
+      run: |
+        export HOME=${GITHUB_WORKSPACE}
+        mkdir -p ${GITHUB_WORKSPACE}/workspace && cd ${GITHUB_WORKSPACE}/workspace
+        wget "${{ github.event.inputs.Tool_Link }}" -O ./payload-dumper.tar.gz
+        tar -zxvf ./payload-dumper.tar.gz
+
+    - name: 💥 Download Rom
+      run: |
+        cd ${GITHUB_WORKSPACE}/workspace
+        sudo apt-get install axel
+        axel -n 16 "${{ github.event.inputs.Rom_Link }}" -o ./${{ github.event.inputs.Zip_name }}.zip
+        unzip ./${{ github.event.inputs.Zip_name }}.zip
+        ls -la ./*
+
+    - name: 💥 Start Dumper Image
+      run: |
+        cd ${GITHUB_WORKSPACE}/workspace
+        echo -e "在 payload.bin 中显示分区列表\n"
+        ./payload-dumper-go -l payload.bin
+        echo -e "开始提取镜像...\n"
+        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p ${{ github.event.inputs.Image_name }} payload.bin
+        echo -e "获取镜像的md5...\n"
+        cd ${GITHUB_WORKSPACE}/workspace/out
+        md5sum * | tee ${GITHUB_WORKSPACE}/workspace/out/md5sum.txt
+        echo -e "整合为压缩包(7Zip)...\n"
+        7za a -t7z -m0=lzma -mx=9 ${{ github.event.inputs.Zip_name }}-${{ github.event.inputs.Image_name }}.7z ./*
+
+    - name: 💥 Upload Transfer
+      run: |
+        cd ${GITHUB_WORKSPACE}/workspace/out
+        sudo chmod -R 0777 ${GITHUB_WORKSPACE}/workspace
+        curl -sL https://git.io/file-transfer | sh
+        ./transfer wet ./${{ github.event.inputs.Zip_name }}-${{ github.event.inputs.Image_name }}.7z
