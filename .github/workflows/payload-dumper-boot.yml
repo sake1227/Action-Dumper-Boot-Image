@@ -45,7 +45,7 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
         sudo apt-get install axel aria2
-        aria2c -c -s 16 "${{ github.event.inputs.Rom_Link }}" -d ./${{ github.event.inputs.Zip_name }}.zip
+        axel -n 8 "${{ github.event.inputs.Rom_Link }}" -o ./${{ github.event.inputs.Zip_name }}.zip
         unzip ./${{ github.event.inputs.Zip_name }}.zip
         ls -la ./*
 
