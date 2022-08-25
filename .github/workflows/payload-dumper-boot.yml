@@ -18,7 +18,7 @@ on:
        
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
 
     steps:
     - name: 💥 Set Swap Space
@@ -62,7 +62,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}/workspace/out
         md5sum * | tee ${GITHUB_WORKSPACE}/workspace/out/md5sum.txt
         echo -e "整合为压缩包(7Zip)...\n"
-        7za a -t7z -m0=lzma -mx=9 ${{ github.event.inputs.Zip_name }}-Boot.7z ./*
+        7za a -t7z -m0=lzma2 -mx=9 ${{ github.event.inputs.Zip_name }}-Boot.7z ./*
 
     - name: 💥 Upload Transfer
       run: |
