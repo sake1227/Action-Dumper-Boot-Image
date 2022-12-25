@@ -61,12 +61,15 @@ jobs:
         echo -e "获取镜像的md5...\n"
         cd ${GITHUB_WORKSPACE}/workspace/out
         md5sum * | tee ${GITHUB_WORKSPACE}/workspace/out/md5sum.txt
+        echo -e "获取镜像的sha256...\n"
+        sha256sum * | tee ${GITHUB_WORKSPACE}/workspace/out/sha256sum.txt
+        
         echo -e "整合为压缩包(7Zip)...\n"
-        7za a -t7z -m0=lzma2 -mx=9 ${{ github.event.inputs.Zip_name }}-Boot.7z ./*
+        7z a -t7z -m0=lzma2 -mx=9 ${{ github.event.inputs.Zip_name }}-Boot.7z ./*
 
     - name: 💥 Upload Transfer
       run: |
         cd ${GITHUB_WORKSPACE}/workspace/out
         sudo chmod -R 0777 ${GITHUB_WORKSPACE}/workspace
-        curl -sL https://git.io/file-transfer | sh
+        curl -sL https://git.io/file-transfer | bash
         ./transfer wet ./${{ github.event.inputs.Zip_name }}-Boot.7z
