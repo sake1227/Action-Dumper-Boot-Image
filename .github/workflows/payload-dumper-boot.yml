@@ -51,7 +51,7 @@ jobs:
         sudo chmod 0777 ./7zzs
         sudo cp ./7zzs /usr/local/bin/7z
         7z --help
-        sudo cd /usr/local/bin
+        cd /usr/local/bin
         sudo curl -sL https://git.io/file-transfer | bash
         sudo chmod 0777 transfer
 
