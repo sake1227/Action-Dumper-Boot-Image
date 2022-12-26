@@ -80,7 +80,7 @@ jobs:
         time="2009-01-01 08:00:00"
         find ./ * -exec touch -m -d "$time" {} \;
         echo -e "整合为压缩包(7Zip)...\n"
-        7z a -t7z -m0=lzma2 -mx=9 ${{ github.event.inputs.Zip_name }}-Boot.7z ./*
+        7z a -t7z -m0=lzma2 -mx=9 -mmt=$(nproc --all) ${{ github.event.inputs.Zip_name }}-Boot.7z ./*
 
     - name: 💥 Upload Transfer
       run: |
