@@ -10,11 +10,11 @@ on:
       Rom_Link:
         description: 'Rom_Link'
         required: true
-        default: ''
+        default: 'https://bigota.d.miui.com/V12.5.12.0.RKUCNXM/miui_SELENE_V12.5.12.0.RKUCNXM_b2efc773b5_11.0.zip'
       Zip_name:
         description: 'Zip_name'
         required: true
-        default: ''
+        default: 'miui_SELENE_V12.5.12.0.RKUCNXM_b2efc773b5_11.0'
        
 jobs:
   build:
@@ -59,7 +59,7 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
         sudo apt-get install axel aria2
-        axel -n 8 "${{ github.event.inputs.Rom_Link }}" -o ./${{ github.event.inputs.Zip_name }}.zip
+        axel -n 16 "${{ github.event.inputs.Rom_Link }}" -o ./${{ github.event.inputs.Zip_name }}.zip
         unzip ./${{ github.event.inputs.Zip_name }}.zip
         ls -la ./*
 
@@ -72,11 +72,13 @@ jobs:
         ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p boot payload.bin
         ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p dtbo payload.bin
         ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p vbmeta payload.bin
+        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p vbmeta_system payload.bin
+        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p vbmeta_vendor payload.bin
         echo -e "获取镜像的md5...\n"
         cd ${GITHUB_WORKSPACE}/workspace/out
-        md5sum * | tee ${GITHUB_WORKSPACE}/workspace/out/md5sum.txt
+        md5sum *.img | tee ${GITHUB_WORKSPACE}/workspace/out/md5sum.txt
         echo -e "获取镜像的sha256...\n"
-        sha256sum * | tee ${GITHUB_WORKSPACE}/workspace/out/sha256sum.txt
+        sha256sum *.img | tee ${GITHUB_WORKSPACE}/workspace/out/sha256sum.txt
         time="2009-01-01 08:00:00"
         find ./ * -exec touch -m -d "$time" {} \;
         echo -e "整合为压缩包(7Zip)...\n"
