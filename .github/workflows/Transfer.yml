@@ -52,4 +52,4 @@ jobs:
     - name: 💥 Transfer
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
-        transfer wet ${{ github.event.inputs.DOWNLOAD_NAME }}
+        transfer ${{ github.event.inputs.DOWNLOAD_NAME }}
