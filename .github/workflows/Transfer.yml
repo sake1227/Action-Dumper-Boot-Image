@@ -47,9 +47,10 @@ jobs:
     - name: 💥 Download file
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
-        aria2c -s16 -x16 -k1M "${{ github.event.inputs.DOWNLOAD_LINK }}" -o ./"${{ github.event.inputs.DOWNLOAD_NAME }}"
+        aria2c -s16 -x16 -k1M "${{ github.event.inputs.DOWNLOAD_LINK }}" -o ${{ github.event.inputs.DOWNLOAD_NAME }}
         
-    - name: 💥 Trans
+    - name: 💥 Transfer
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
-        transfer wet ./"${{ github.event.inputs.DOWNLOAD_NAME }}"
+        aria2c -s16 -x16 -k1M "https://raw.githubusercontent.com/iamleot/transferwee/master/transferwee.py" -o transferwee.py
+        python transferwee.py upload ${{ github.event.inputs.DOWNLOAD_NAME }}
