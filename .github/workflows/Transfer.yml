@@ -52,5 +52,4 @@ jobs:
     - name: 💥 Transfer
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
-        aria2c -s16 -x16 -k1M "https://raw.githubusercontent.com/iamleot/transferwee/master/transferwee.py" -o transferwee.py
-        python transferwee.py upload ${{ github.event.inputs.DOWNLOAD_NAME }}
+        transfer wet ${{ github.event.inputs.DOWNLOAD_NAME }}
