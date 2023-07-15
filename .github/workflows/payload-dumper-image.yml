@@ -22,13 +22,13 @@ on:
        
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: 💥 Set Swap Space
       uses: pierotofy/set-swap-space@master
       with:
-        swap-size-gb: 12
+        swap-size-gb: 8
 
     - name: 💥 Check Out
       uses: actions/checkout@main
@@ -49,9 +49,9 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}/workspace
         mkdir -p 7-zip && cd 7-zip
-        wget "https://jaist.dl.sourceforge.net/project/sevenzip/7-Zip/22.01/7z2201-linux-x64.tar.xz" -O "7z2201-linux-x64.tar.xz"
-        sudo chmod 0777 "7z2201-linux-x64.tar.xz"
-        tar -xf "7z2201-linux-x64.tar.xz"
+        wget "https://7-zip.org/a/7z2301-linux-x64.tar.xz" -O "7z2301-linux-x64.tar.xz"
+        sudo chmod 0777 "7z2301-linux-x64.tar.xz"
+        tar -xf "7z2301-linux-x64.tar.xz"
         sudo chmod 0777 ./7zzs
         sudo cp ./7zzs /usr/local/bin/7z
         7z --help
