@@ -21,11 +21,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - name: 💥 Set Swap Space
-      uses: pierotofy/set-swap-space@master
-      with:
-        swap-size-gb: 12
-
     - name: 💥 Check Out
       uses: actions/checkout@main
 
@@ -69,11 +64,7 @@ jobs:
         echo -e "在 payload.bin 中显示分区列表\n"
         ./payload-dumper-go -l payload.bin
         echo -e "开始提取镜像...\n"
-        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p boot payload.bin
-        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p dtbo payload.bin
-        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p vbmeta payload.bin
-        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p vbmeta_system payload.bin
-        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p vbmeta_vendor payload.bin
+        ./payload-dumper-go -o ${GITHUB_WORKSPACE}/workspace/out -p boot,dtbo,vbmeta,vbmeta_system,vbmeta_vendor payload.bin
         echo -e "获取镜像的md5...\n"
         cd ${GITHUB_WORKSPACE}/workspace/out
         md5sum *.img | tee ${GITHUB_WORKSPACE}/workspace/out/md5sum.txt
