@@ -24,6 +24,6 @@ jobs:
       - name: tiqu
         run: |
          pip install git+https://github.com/5ec1cff/payload-dumper
-         cd Firmware_extractor
+         cd docs
          aria2c -s 10 -x 10 -d . -o firmware.zip "${{ github.event.inputs.rom_url }}"
          payload_dumper --partitions init_boot firmware.zip
