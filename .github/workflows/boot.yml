@@ -23,10 +23,8 @@ jobs:
 
       - name: tiqu
         run: |
-         cd ~
+         mkdir -p ${GITHUB_WORKSPACE}/workspace && cd ${GITHUB_WORKSPACE}/workspace
          pip install git+https://github.com/5ec1cff/payload-dumper
          aria2c -s 10 -x 10 -d . -o firmware.zip "${{ github.event.inputs.rom_url }}"
          payload_dumper --partitions boot firmware.zip
-         for dir in /* ; do
-          echo $dir
-         done
+         ls
