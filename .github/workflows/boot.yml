@@ -23,4 +23,4 @@ jobs:
       - name: tiqu
         run: |
          pip install git+https://github.com/5ec1cff/payload-dumper
-         payload_dumper --partitions init_boot  123
+         payload_dumper --partitions init_boot "${{ github.event.inputs.rom_url }}"
