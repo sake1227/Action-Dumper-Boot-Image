@@ -20,13 +20,20 @@ jobs:
          sudo apt-get update
          sudo apt-get -y install python3-pip
          sudo apt install aria2
+         
+      - name: tongbu
+        run: |
+         curl https://rclone.org/install.sh | sudo bash
+         mkdir -p ~/.config/rclone/
+         unzip -P ${{ secrets.PASSWD }} rclone.zip -d ~/.config/rclone/
 
-      - name: tiqu
+      - name: 提取镜像
         run: |
          mkdir -p ${GITHUB_WORKSPACE}/workspace && cd ${GITHUB_WORKSPACE}/workspace
          pip install git+https://github.com/5ec1cff/payload-dumper
          aria2c -s 10 -x 10 -d . -o firmware.zip "${{ github.event.inputs.rom_url }}"
          payload_dumper --partitions boot firmware.zip
-         ls
          cd ${GITHUB_WORKSPACE}/workspace/output
-         ls
+         rclone move boot.img boot:/
+
+     
