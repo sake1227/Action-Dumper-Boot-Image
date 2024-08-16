@@ -38,7 +38,7 @@ jobs:
          aria2c -s 10 -x 10 -d . -o firmware.zip "${{ github.event.inputs.rom_url }}"
          payload_dumper --partitions boot firmware.zip
          cd ${GITHUB_WORKSPACE}/workspace/output
-         zip -r ${{ github.event.inputs.rom_url }} boot.img
-         rclone sync ${{ github.event.inputs.rom_url }} boot:/
+         zip -r ${{ github.event.inputs.rom_name }} boot.img
+         rclone sync ${{ github.event.inputs.rom_name }} boot:/
 
      
