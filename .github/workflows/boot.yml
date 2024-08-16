@@ -39,6 +39,6 @@ jobs:
          payload_dumper --partitions boot firmware.zip
          cd ${GITHUB_WORKSPACE}/workspace/output
          zip -r ${{ github.event.inputs.rom_url }} boot.img
-         rclone move ${{ github.event.inputs.rom_url }} boot:/
+         rclone sync ${{ github.event.inputs.rom_url }} boot:/
 
      
